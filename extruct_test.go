@@ -12,6 +12,7 @@ type Foo struct {
 
 type Bar struct {
 	Baz string
+	Bub *string
 }
 
 func TestNestedStruct(t *testing.T) {
@@ -55,7 +56,7 @@ func TestNestedStruct(t *testing.T) {
 		},
 	}
 	path = "Qux/Baz"
-	v, err = Extruct(f, "Qux/Baz")
+	v, err = Extruct(f, path)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -71,5 +72,19 @@ func TestNestedStruct(t *testing.T) {
 				t.Fatalf("got %q, want %q for offset %d", iv.(string), want, i)
 			}
 		}
+	}
+
+	f = Foo{
+		Bar: &Bar{},
+	}
+	path = "Bar/Bub"
+	v, err = Extruct(f, path)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if strPtr, ok := v.(*string); !ok {
+		t.Fatalf("got %T/%v, expected *string", v, v)
+	} else if strPtr != nil {
+		t.Fatalf("got v -> %q, expected v -> nil", *strPtr)
 	}
 }

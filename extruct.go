@@ -53,7 +53,7 @@ func extruct(v interface{}, path []string, offset int) (interface{}, error) {
 	if field == (reflect.Value{}) {
 		return nil, &NotFoundError{Path: strings.Join(path[0:offset+1], "/")}
 	}
-	if field.Kind() == reflect.Ptr {
+	if field.Kind() == reflect.Ptr && !field.IsNil() {
 		field = reflect.Indirect(field)
 	}
 	// terminal case
