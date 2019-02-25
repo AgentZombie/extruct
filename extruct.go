@@ -8,6 +8,8 @@ import (
 )
 
 var (
+	PathSeparator = "."
+
 	ErrInvalidPath = errors.New("invalid path")
 )
 
@@ -24,7 +26,7 @@ func (err NotFoundError) String() string {
 }
 
 func Extruct(v interface{}, path string) (interface{}, error) {
-	return extruct(v, strings.Split(path, "/"), 0)
+	return extruct(v, strings.Split(path, PathSeparator), 0)
 }
 
 func extruct(v interface{}, path []string, offset int) (interface{}, error) {
@@ -39,7 +41,7 @@ func extruct(v interface{}, path []string, offset int) (interface{}, error) {
 		if offset == pathLen-1 {
 			return nil, nil
 		}
-		return nil, errors.New("nil in path at " + strings.Join(path[0:offset], "/"))
+		return nil, errors.New("nil in path at " + strings.Join(path[0:offset], PathSeparator))
 	}
 	val := reflect.ValueOf(v)
 	if val.Kind() == reflect.Ptr {
@@ -51,7 +53,7 @@ func extruct(v interface{}, path []string, offset int) (interface{}, error) {
 	}
 	field := val.FieldByName(elemStr)
 	if field == (reflect.Value{}) {
-		return nil, &NotFoundError{Path: strings.Join(path[0:offset+1], "/")}
+		return nil, &NotFoundError{Path: strings.Join(path[0:offset+1], PathSeparator)}
 	}
 	if field.Kind() == reflect.Ptr && !field.IsNil() {
 		field = reflect.Indirect(field)

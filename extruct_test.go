@@ -23,7 +23,7 @@ func TestNestedStruct(t *testing.T) {
 		},
 	}
 
-	path := "Bar/Baz"
+	path := "Bar.Baz"
 	want := "baz"
 	v, err := Extruct(f, path)
 	if err != nil {
@@ -55,7 +55,7 @@ func TestNestedStruct(t *testing.T) {
 			&Bar{Baz: "4"},
 		},
 	}
-	path = "Qux/Baz"
+	path = "Qux.Baz"
 	v, err = Extruct(f, path)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -77,7 +77,7 @@ func TestNestedStruct(t *testing.T) {
 	f = Foo{
 		Bar: &Bar{},
 	}
-	path = "Bar/Bub"
+	path = "Bar.Bub"
 	v, err = Extruct(f, path)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
